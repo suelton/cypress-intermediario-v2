@@ -24,35 +24,35 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add('login', (
-    user = Cypress.env('user_name'), 
+    user = Cypress.env('user_name'),
     password = Cypress.env('user_password'),
-    {cacheSession = true} = {}
-    ) => {
-        const login = () => {
-            cy.visit('/users/sign_in')
-        
-            cy.get("[data-qa-selector='login_field']").type(user)
-            cy.get("[data-qa-selector='password_field']").type(password, {log: false})
-            cy.get("[data-qa-selector='sign_in_button']").click()
-        }
+    { cacheSession = true } = {}
+) => {
+    const login = () => {
+        cy.visit('/users/sign_in')
 
-        const validate = () => {
-            cy.visit('/')
-            cy.location('pathname', {timeout: 1000})
-              .should('not.eq', '/users/sign_in')
-        }
+        cy.get("[data-qa-selector='login_field']").type(user)
+        cy.get("[data-qa-selector='password_field']").type(password, { log: false })
+        cy.get("[data-qa-selector='sign_in_button']").click()
+    }
 
-        const options = {
-            cacheAcrossSpecs: true,
-            validate,
-        }
+    const validate = () => {
+        cy.visit('/')
+        cy.location('pathname', { timeout: 1000 })
+            .should('not.eq', '/users/sign_in')
+    }
 
-        if(cacheSession) {
-            cy.session(user, login, options)            
-        } else {
-            login()
-        }        
-    })
+    const options = {
+        cacheAcrossSpecs: true,
+        validate,
+    }
+
+    if (cacheSession) {
+        cy.session(user, login, options)
+    } else {
+        login()
+    }
+})
 
 
 Cypress.Commands.add('logout', () => {
@@ -62,11 +62,11 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.Commands.add('gui_createProject', (project) => {
     cy.visit('/projects/new')
-    
+
     cy.get('#project_name').type(project.name)
     cy.get('#project_description').type(project.description)
     cy.get('.qa-initialize-with-readme-checkbox').click()
-    
+
     cy.contains('Create project').click()
 })
 
@@ -75,4 +75,10 @@ Cypress.Commands.add('gui_createIssue', (issue) => {
     cy.get('.qa-issuable-form-title').type(issue.title)
     cy.get('.qa-issuable-form-description').type(issue.description)
     cy.contains('Submit issue').click()
+})
+
+Cypress.Commands.add('gui_setLabelOnIssue', (label) => {
+    cy.get('.qa-edit-link-labels').click()    
+    cy.get('.label-item').contains(label.name).click()    
+    cy.get('body').click()
 })
