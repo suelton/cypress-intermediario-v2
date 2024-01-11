@@ -4,7 +4,7 @@ const options = { env: { snapshotOnly: true } }
 
 describe('Create project', options, () => {
     beforeEach(() => {
-        cy.api_deleteProject()
+        cy.api_deleteProjects()
 
         cy.login()        
     })

@@ -13,7 +13,7 @@ describe('Create issue', options, () => {
     }
 
     beforeEach(() => {
-        cy.api_deleteProject()
+        cy.api_deleteProjects()
 
         cy.login()
         cy.api_createProject(issue.project)        
